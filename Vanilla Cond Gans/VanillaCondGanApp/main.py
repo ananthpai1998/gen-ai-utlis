@@ -27,7 +27,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "GET":
+    if request.method == "GET" or request.method == "POSTPOSTPOST":
         # user_input = request.get_json().get('input')
         user_input = request.args.get('user_input')
         if user_input is not None: 
@@ -35,7 +35,7 @@ def index():
                 # user_input = json.loads(request.data)['input']
                 print('Recived post request to generate images..')
                 print('Loading the model ...')
-                testing_gen = load_model('F:\Projects\MS projects\ML backend\Vanilla Cond Gans\VanillaCondGanApp\p1_gen.h5')
+                testing_gen = load_model('p1_gen.h5')
                 print('Generating images ...')
                 one_hot_labels = tf.one_hot(tf.constant([int(user_input)]), 10)
                 random_latent_vectors = tf.random.normal(shape=(1, 100))
@@ -61,15 +61,7 @@ def index():
                 """
                 return html_response
                 
-                # return send_file(
-                #     BytesIO(image_data.numpy()),
-                #     mimetype='image/png',
-                #     as_attachment=True,
-                #     download_name='generated_image.png'
-                # )
-                
-                # Send the image as a response
-                # return 
+
                 
 
                 
@@ -82,5 +74,5 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
     
